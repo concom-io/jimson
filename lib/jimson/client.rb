@@ -45,7 +45,7 @@ module Jimson
         'params'  => args,
         'id'      => self.class.make_id
       })
-      resp = Request.execute(:method => :post, :url => @url, :payload => post_data, :headers => @opts,timeout: nil)
+      resp = RestClient::Request.execute(:method => :post, :url => @url, :payload => post_data, :headers => @opts,timeout: nil)
       if resp.nil? || resp.body.nil? || resp.body.empty?
         raise Client::Error::InvalidResponse.new
       end
@@ -55,7 +55,7 @@ module Jimson
 
     def send_batch_request(batch)
       post_data = MultiJson.encode(batch)
-      resp = Request.execute(:method => :post, :url => @url, :payload => post_data, :headers => @opts,timeout: nil)
+      resp = RestClient::Request.execute(:method => :post, :url => @url, :payload => post_data, :headers => @opts,timeout: nil)
       if resp.nil? || resp.body.nil? || resp.body.empty?
         raise Client::Error::InvalidResponse.new
       end
