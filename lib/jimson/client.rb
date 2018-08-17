@@ -18,6 +18,8 @@ module Jimson
       @batch = []
       @opts = opts
       @namespace = namespace
+      @timeout = opts[:timeout]
+      opts.delete(:timeout)
       @opts[:content_type] = 'application/json'
     end
 
@@ -45,7 +47,7 @@ module Jimson
         'params'  => args,
         'id'      => self.class.make_id
       })
-      resp = RestClient::Request.execute(:method => :post, :url => @url, :payload => post_data, :headers => @opts,timeout: nil)
+      resp = RestClient::Request.execute(:method => :post, :url => @url, :payload => post_data, :headers => @opts,timeout: @timeout)
       if resp.nil? || resp.body.nil? || resp.body.empty?
         raise Client::Error::InvalidResponse.new
       end
@@ -55,7 +57,7 @@ module Jimson
 
     def send_batch_request(batch)
       post_data = MultiJson.encode(batch)
-      resp = RestClient::Request.execute(:method => :post, :url => @url, :payload => post_data, :headers => @opts,timeout: nil)
+      resp = RestClient::Request.execute(:method => :post, :url => @url, :payload => post_data, :headers => @opts,timeout: @timeout)
       if resp.nil? || resp.body.nil? || resp.body.empty?
         raise Client::Error::InvalidResponse.new
       end
